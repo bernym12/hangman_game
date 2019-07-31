@@ -25,31 +25,51 @@ def generateString():
     global wordWorking
     i = 1
     dash = "-"
+    wordWorking = "-"
     while (i < len(word)):
         wordWorking = wordWorking + dash
         i = i + 1
 
 #play game function (wait for user input and bus it out somewhere else)
 def playGame():
+    global continuePlaying
+    global usedChars
+    global wordRemoving
+    global word
+    global wordWorking
+    global wrongGuesses 
+    wrongGuesses = 0
+    rightGuesses = 0
+    wordRemoving = ""
+    word = ""
+    wordWorking = ""
+    usedChars = ""
     pickWord()
     generateString()
+    usedChars = ""
     while(continuePlaying):
 
         showGame()
-        userInput = input("Guess a letter: ")
+        print("\nCharacters guessed: " + usedChars)
+        userInput = raw_input("Guess a letter: ")
         if (userInput in usedChars):
+            print(userInput + " already guessed, go again\n")
             continue
 
         inputValid = checkInput(userInput)
-        usedChars = usedChars = ", " + userInput
+        if(wrongGuesses == 0 and rightGuesses == 0):
+            usedChars = userInput
+        else:
+            usedChars = usedChars + ", " + userInput
 
-        if(inputValid & rightGuesses < len(word)):
+
+        if(inputValid and (rightGuesses < len(word))):
             correctInput(userInput)
-        elif(inputValid & rightGuesses == len(word)):
+        elif(inputValid and (rightGuesses == len(word))):
             theyWin()
-        elif(not inputValid & wrongGuesses <= allowedWrongGuesses):
+        elif(not inputValid and (wrongGuesses <= allowedWrongGuesses)):
             incorrectInput(userInput)
-        elif(not inputValid & wrongGuesses > allowedWrongGuesses):
+        elif(not inputValid and (wrongGuesses > allowedWrongGuesses)):
             theyLose()
 
     playAgain()
@@ -84,7 +104,7 @@ def showGame():
         print (hangman10)
     
     print(wordWorking)
-    print("\nCharacters guessed: " + usedChars)
+    
 
 #user gave correct input, update string
 def correctInput(userInput):
@@ -92,51 +112,56 @@ def correctInput(userInput):
     global wordRemoving
     global wordWorking
     rightGuesses = rightGuesses + 1
-    print ("Right! :D Your guess " + userInput + " is in the word.")
+    print ("Right! :D Your guess " + userInput + " is in the word.\n")
 
-    i = 0
-    wordRemovingList = list(wordRemoving)
-    wordWorkingList = list(wordWorking)
-    while(i < len(wordRemoving)):
-        if(userInput == wordRemovingList[i]):
-            wordRemovingList[i] = " "
-            wordWorkingList[i] = userInput
-        i = i + 1
+    while(userInput in wordRemoving):
+        index = wordRemoving.find(userInput)
+        l1 = list(wordRemoving)
+        l1[index] = '*'
+        wordRemoving = "".join(l1)
+
+        l2 = list(wordWorking)
+        l2[index] = userInput
+        wordWorking = "".join(l2)
     
-    wordRemoving = ""
-    wordRemoving.join(wordRemovingList)
+    if(wordWorking == word):
+        theyWin()
 
-    wordWorking = ""
-    wordWorking.join(wordWorkingList)
 
 #user gave last correct input, they win
 def theyWin():
+    global continuePlaying
     continuePlaying = False
     print("`~`~` Congrats!!!! You got the winning word: " + word + "!!!!`~`~`")
 
 #user gave incorrect input, edit hangman and incorrect guesses
 def incorrectInput(userInput):
     global wrongGuesses
-    wrongGuesses = wrongGuesses + 1
-    print ("Wrong >:( Your guess " + userInput + " is not in the word.\nMr. Hangman gets another body part.")
-    
     remaining = allowedWrongGuesses - wrongGuesses
-    if(remaining <= 4):
-        print ("Warning!!! Only " + remaining + " wrong guesses remaining!")
+    wrongGuesses = wrongGuesses + 1
+    if(remaining > 0):
+        print ("Wrong >:( Your guess " + userInput + " is not in the word.\nMr. Hangman gets another body part.\n")
+        if(remaining <= 4):
+            print ("Warning!!! Only " + str(remaining) + " wrong guesses remaining!")
+    else:
+        theyLose()
+    
 
 #user maxed out guesses, they lose
 def theyLose():
     global continuePlaying
     continuePlaying = False
-    print("boi you dun goofed and hangman is ded. Winning word was: " + word)
+    print("\n\nboi you dun goofed and hangman is ded. Winning word was: " + word)
 
 
 #play again?
 def playAgain():
-    play = input("Do you want to play again? (y/n): ")
+    global continuePlaying
+    play = raw_input("Do you want to play again? (y/n): ")
     if (play == "y" or play == "Y"):
         print ("Yay!! Here we go again!!!!!")
-        playGame
+        continuePlaying = True
+        playGame()
     else:
         print ("Baiiiii")
 
@@ -145,7 +170,7 @@ def playAgain():
 #GLOBAL VARIABLE string of underscores / chars
 wordRemoving = ""
 word = ""
-wordWorking = "-"
+wordWorking = ""
 wordLength = 0
 usedChars = ""
 hangmanEmpty = "   ____\n  |    |\n  |\n  |\n  |\n  |\n__|__"
