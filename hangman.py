@@ -7,6 +7,17 @@
 word = ""
 wordWorking = ""
 wordLength = 0
+hangmanEmpty = "   ____\n  |    |\n  |\n  |\n  |\n  |\n__|__"
+hangman1 = "   ____\n  |    |\n  |    O\n  |\n  |\n  |\n__|__"
+hangman2 = "   ____\n  |    |\n  |    O\n  |    |\n  |\n  |\n__|__"
+hangman3 = "   ____\n  |    |\n  |    O\n  |   \|\n  |\n  |\n__|__"
+hangman4 = "   ____\n  |    |\n  |    O\n  |  '\|\n  |\n  |\n__|__"
+hangman5 = "   ____\n  |    |\n  |    O\n  |  '\|/\n  |\n  |\n__|__"
+hangman6 = "   ____\n  |    |\n  |    O\n  |  '\|/'\n  |\n  |\n__|__"
+hangman7 = "   ____\n  |    |\n  |    O\n  |  '\|/'\n  |   /\n  |\n__|__"
+hangman8 = "   ____\n  |    |\n  |    O\n  |  '\|/'\n  |  _/\n  |\n__|__"
+hangman9 = "   ____\n  |    |\n  |    O\n  |  '\|/'\n  |  _/ \\\n  |\n__|__"
+hangman10 = "   ____\n  |    |\n  |    O\n  |  '\|/'\n  |  _/ \\_\n  |\n__|__"
 
 #GLOBAL VARIABLE CONST max amount of guesses (how many parts does mr hangman have)
 allowedWrongGuesses = 10 #head, body, arms, hands, legs, feet
@@ -51,6 +62,30 @@ def checkInput(userInput):
 
 #show game board
 def showGame():
+    print wordWorking
+    
+    if(wrongGuesses == 0):
+        print hangmanEmpty
+    elif(wrongGuesses == 1):
+        print hangman1
+    elif(wrongGuesses == 2):
+        print hangman2
+    elif(wrongGuesses == 3):
+        print hangman3
+    elif(wrongGuesses == 4):
+        print hangman4
+    elif(wrongGuesses == 5):
+        print hangman5
+    elif(wrongGuesses == 6):
+        print hangman6
+    elif(wrongGuesses == 7):
+        print hangman7
+    elif(wrongGuesses == 8):
+        print hangman8
+    elif(wrongGuesses == 9):
+        print hangman9
+    elif(wrongGuesses == 10):
+        print hangman10
 
 #user gave correct input, update string
 def correctInput(userInput):
